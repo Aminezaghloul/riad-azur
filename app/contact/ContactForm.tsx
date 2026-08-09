@@ -15,14 +15,24 @@ export function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
-    window.setTimeout(() => {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, subject, message }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || "Unable to send message.");
       setStatus("success");
       setName("");
       setEmail("");
       setPhone("");
       setSubject("General Inquiry");
       setMessage("");
-    }, 650);
+    } catch (error) {
+      console.error("Contact form submission failed", error);
+      setStatus("error");
+    }
   };
 
   if (status === "success") {
@@ -31,7 +41,7 @@ export function ContactForm() {
         <CheckCircle2 className="w-16 h-16 text-palm-800 mx-auto" />
         <h3 className="font-serif text-3xl text-obsidian-900">Thank you.</h3>
         <p className="text-taupe-600 text-xs sm:text-sm font-sans max-w-md mx-auto leading-relaxed">
-          Demo complete. No message or personal information was sent or stored.
+          Your message has been sent successfully. We will reply as soon as possible.
         </p>
         <div className="pt-4">
           <Button variant="outline" onClick={() => setStatus("idle")}>Send Another Message</Button>
@@ -45,7 +55,7 @@ export function ContactForm() {
       <div>
         <h2 className="font-serif text-3xl text-obsidian-900">Send a Message</h2>
         <p className="text-taupe-600 text-xs font-sans mt-1">
-          Try the fictional inquiry flow. Nothing entered here is sent or stored.
+          Send a direct inquiry to the Riad Azur concept team.
         </p>
       </div>
 
@@ -132,7 +142,7 @@ export function ContactForm() {
 
         {status === "error" && (
           <p className="text-rose-600 text-xs font-sans">
-            Something went wrong. Please try again or contact us on WhatsApp.
+            Your message could not be sent. Please check the details and try again.
           </p>
         )}
 
