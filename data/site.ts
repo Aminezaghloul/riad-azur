@@ -15,7 +15,7 @@ export interface SiteConfig {
 export const site: SiteConfig = {
   name: "Riad Azur",
   logoText: "RIAD AZUR",
-  siteUrl: "https://riad-azur.example",
+  siteUrl: "https://riad-azur.vercel.app",
   tagline: "A quiet rhythm in the medina.",
   description: "A fictional boutique riad concept in Marrakech, with intimate rooms, a zellige courtyard and warm Moroccan hospitality.",
   heroEyebrow: "Marrakech, Morocco",
